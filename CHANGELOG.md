@@ -1,3 +1,9 @@
+# v0.0.4 (Sun Jan 05 2025)
+
+
+
+---
+
 # v0.0.3 (Sun Jan 05 2025)
 
 #### ⚠️ Pushed to `main`
