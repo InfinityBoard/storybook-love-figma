@@ -8,7 +8,7 @@ import { Progress } from "./Progress";
 
 interface FigmaProps {
 	url: string;
-	options: {
+	options?: {
 		opacity: number;
 	}
 }
