@@ -6,10 +6,12 @@ import { FIGMA_CLIENT } from "../constants";
 import { transparentize } from 'polished';
 import { Progress } from "./Progress";
 
-interface FigmaProps {
+export interface FigmaProps {
 	url: string;
 	options?: {
 		opacity: number;
+		left: number;
+		top: number;
 	}
 }
 
@@ -168,7 +170,7 @@ export const Figma: React.FC<FigmaProps> = ({ url, options }) => {
 		<>
 			<Progress isAnimating={loadingImage} />
 
-			<Container>
+			<Container style={{ left: options?.left || 0, top: options?.top || 0 }}>
 				{imageSrc && (
 					<img 
 						src={imageSrc} 

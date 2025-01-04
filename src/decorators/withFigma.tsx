@@ -3,19 +3,20 @@ import { createRoot } from 'react-dom/client';
 import { Figma } from "../components";
 import { useGlobals, useEffect } from "storybook/internal/preview-api";
 import type { DecoratorFunction } from "storybook/internal/types"
+import type { FigmaProps } from "../components"
 
 import { KEY } from "../constants";
 
-interface FigmaState {
+interface FigmaState extends FigmaProps {
 	addon: boolean;
-	url: string | undefined;
 }
 
 export const withFigma: DecoratorFunction = (StoryFn, context) => {
 	const [globals] = useGlobals();
 	const addon = globals[KEY];
 	const canvas = context.canvasElement as ParentNode;
-	const { figma: url } = context.parameters;
+	const { url, options } = context.parameters.figma;
+	
 
 	// Is the addon being used in the docs panel
 	const isInDocs = context.viewMode === "docs";
@@ -25,6 +26,7 @@ export const withFigma: DecoratorFunction = (StoryFn, context) => {
 			addExtraContentToStory(canvas, {
 				addon,
 				url,
+				options,
 			});
 		}
 	}, [addon, isInDocs]);
@@ -44,7 +46,7 @@ function addExtraContentToStory(canvas: ParentNode, state: FigmaState) {
 	const root = createRoot(container);
 
 	if(state.addon && state.url) {
-		root.render(<Figma url={state.url} />);
+		root.render(<Figma url={state.url} options={state.options} />);
 	} else {
 		root.unmount();
 		container.remove();
