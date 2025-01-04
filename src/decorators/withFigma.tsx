@@ -14,15 +14,15 @@ interface FigmaState extends FigmaProps {
 export const withFigma: DecoratorFunction = (StoryFn, context) => {
 	const [globals] = useGlobals();
 	const addon = globals[KEY];
-	const canvas = context.canvasElement as ParentNode;
-	const { url, options } = context.parameters.figma;
-	
+	const canvas = context.canvasElement as ParentNode;	
 
 	// Is the addon being used in the docs panel
 	const isInDocs = context.viewMode === "docs";
 
 	useEffect(() => {
-		if (!isInDocs) {
+		if (!isInDocs && context.parameters.figma) {
+			const { url, options } = context.parameters.figma;
+
 			addExtraContentToStory(canvas, {
 				addon,
 				url,
