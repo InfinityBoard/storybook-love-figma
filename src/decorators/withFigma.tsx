@@ -29,7 +29,7 @@ export const withFigma: DecoratorFunction = (StoryFn, context) => {
 		}
 	}, [addon, isInDocs]);
 
-	return StoryFn;
+	return StoryFn();
 }
 
 function addExtraContentToStory(canvas: ParentNode, state: FigmaState) {
