@@ -1,11 +1,16 @@
-import React, { Fragment, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { keyframes, styled } from "storybook/internal/theming";
 import { FigmaIcon } from '@storybook/icons';
+import { FIGMA_CLIENT } from "../constants";
 
 import { transparentize } from 'polished';
+import { Progress } from "./Progress";
 
 interface FigmaProps {
-
+	url: string;
+	options: {
+		opacity: number;
+	}
 }
 
 const slideIn = keyframes({
@@ -34,11 +39,14 @@ const Container = styled.div({
 	top: 0,
 	zIndex: 9999,
 	margin: "1rem",
+	pointerEvents: "none"
 });
 
 const Notification = styled.div<{ duration?: number }>(
 	({ theme }) => ({
 		fontFamily: `"Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif`,
+
+		width: "280px",
 
 		position: "absolute",
 		right: "0",
@@ -107,25 +115,84 @@ const SubHeadline = styled.div({
 	whiteSpace: 'balance',
 });
 
-export const Figma: React.FC<FigmaProps> = () => {
+export const Figma: React.FC<FigmaProps> = ({ url, options }) => {
+	const [imageSrc, setImageSrc] = useState<string | undefined>();
+
+	const [loadingImage, setLoadingImage] = useState<boolean>(false);
+	const [error, setError] = useState<string | undefined>();
+
+	useEffect(() => {
+		setLoadingImage(true);
+
+		if(!url) {
+			setError("There is not image configured for this component.");
+			setLoadingImage(false);
+
+			return;
+		}
+
+		const urlProvided = new URL(url);
+		const nodeId = urlProvided.searchParams.get("node-id");
+		const fileId = urlProvided.pathname.split("/")[2];
+
+		if (!nodeId || !fileId) {
+			setError("Invalid Figma link");
+			setLoadingImage(false);
+
+			return;
+		}
+
+		setError(undefined);
+
+		FIGMA_CLIENT.fileImages(fileId, {
+			ids: [nodeId],
+			format: "svg",
+		}).then(({ data }) => {
+			const nodeIdKey = nodeId.replace("-", ":");
+			const imageUrl = data.images[nodeIdKey];
+
+			if(imageUrl) {
+				setImageSrc(imageUrl);
+			} else {
+				setImageSrc(undefined);
+				setError("The configured image for the current viewport width is invalid or can not be fetched.");
+				setLoadingImage(false);
+			}
+		}).catch((error) => {
+			setLoadingImage(false);
+			setError(`An error ocurred while loading the image. "${error}"`)
+		});
+	}, [url]);
+
 	return (
 		<>
+			<Progress isAnimating={loadingImage} />
+
 			<Container>
-				
+				{imageSrc && (
+					<img 
+						src={imageSrc} 
+						onLoad={() => setLoadingImage(false)} 
+						style={{ opacity: options?.opacity || 0.5 }} 
+					/>
+				)}
 			</Container>
-			<Notification>
-				<NotificationIconWrapper>
-					<FigmaIcon />
-				</NotificationIconWrapper>
-				<NotificationTextWrapper>
-					<Headline>
-						Storybook Love Figma
-					</Headline>
-					<SubHeadline>
-						URL not found
-					</SubHeadline>
-				</NotificationTextWrapper>
-			</Notification>
+			
+			{error && (
+				<Notification>
+					<NotificationIconWrapper>
+						<FigmaIcon />
+					</NotificationIconWrapper>
+					<NotificationTextWrapper>
+						<Headline>
+							Storybook Love Figma
+						</Headline>
+						<SubHeadline>
+							{error}
+						</SubHeadline>
+					</NotificationTextWrapper>
+				</Notification>
+			)}
 		</>
 	);
 }

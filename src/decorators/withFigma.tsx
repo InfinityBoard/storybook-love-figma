@@ -1,13 +1,14 @@
-import React, { useMemo } from "react"
+import React from "react"
+import { Figma } from "../components";
 import { useGlobals } from "storybook/internal/preview-api";
 import type { DecoratorFunction } from "storybook/internal/types"
+
 import { KEY } from "../constants";
-import { Figma } from "../components/Figma";
 
 export const withFigma: DecoratorFunction = (StoryFn, context) => {
 	const [globals] = useGlobals();
-	const myAddon = globals[KEY];
-	const canvas = context.canvasElement as ParentNode;
+	const addon = globals[KEY];
+	const { figma: url } = context.parameters;
 
 	// Is the addon being used in the docs panel
 	const isInDocs = context.viewMode === "docs";
@@ -15,7 +16,7 @@ export const withFigma: DecoratorFunction = (StoryFn, context) => {
 	return (
 		<>
 			{StoryFn() as React.ReactNode}
-			{!isInDocs && <Figma />}
+			{!isInDocs && addon && <Figma url={url} />}
 		</>
 	)
 }

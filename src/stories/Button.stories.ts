@@ -30,6 +30,10 @@ export const Primary: Story = {
     primary: true,
     label: "Button",
   },
+  parameters: {
+    figma:
+      "https://www.figma.com/design/01BsHuyniCdUN7oDJEuB61/Figma_2_7-(2)?node-id=1357-24198&t=ozOYobnrUE5Iv7Ie-0",
+  },
 };
 
 export const Secondary: Story = {
