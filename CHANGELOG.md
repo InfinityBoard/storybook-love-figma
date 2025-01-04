@@ -1,3 +1,15 @@
+# v0.0.5 (Sun Jan 05 2025)
+
+#### ⚠️ Pushed to `main`
+
+- fix: fix error ([@iAmAir](https://github.com/iAmAir))
+
+#### Authors: 1
+
+- [@iAmAir](https://github.com/iAmAir)
+
+---
+
 # v0.0.4 (Sun Jan 05 2025)
 
 #### ⚠️ Pushed to `main`
