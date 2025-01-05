@@ -1,3 +1,15 @@
+# v0.0.7 (Sun Jan 05 2025)
+
+#### ⚠️ Pushed to `main`
+
+- feat: fix figma token ([@iAmAir](https://github.com/iAmAir))
+
+#### Authors: 1
+
+- [@iAmAir](https://github.com/iAmAir)
+
+---
+
 # v0.0.6 (Sun Jan 05 2025)
 
 
