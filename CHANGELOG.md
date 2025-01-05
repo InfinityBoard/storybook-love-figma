@@ -1,3 +1,15 @@
+# v0.0.9 (Sun Jan 05 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update constants.ts ([@iAmAir](https://github.com/iAmAir))
+
+#### Authors: 1
+
+- [@iAmAir](https://github.com/iAmAir)
+
+---
+
 # v0.0.8 (Sun Jan 05 2025)
 
 
